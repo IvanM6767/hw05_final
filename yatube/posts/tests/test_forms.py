@@ -79,13 +79,10 @@ class PostFormTests(TestCase):
         self.assertTrue(
             Post.objects.filter(
                 text='Тестовый пост',
-                group=self.group_1
-            ).exists())
-        self.assertTrue(
-            Post.objects.filter(
-                text='Тестовый пост',
+                group=self.group_1,
                 author=self.author
             ).exists())
+
         self.assertEqual(response.context['page_obj'].object_list[0].image,
                          'posts/small.gif')
 
@@ -125,12 +122,12 @@ class PostFormTests(TestCase):
         }
         response = self.authorized_client.post(
             reverse((
-                'posts:add_comment'), kwargs={'post_id': f'{self.post.id}'}),
+                'posts:add_comment'), kwargs={'post_id': self.post.id}),
             data=form_data,
             follow=True
         )
         self.assertRedirects(response, reverse((
-            'posts:post_detail'), kwargs={'post_id': f'{self.post.id}'}))
+            'posts:post_detail'), kwargs={'post_id': self.post.id}))
         self.assertTrue(
             Comment.objects.filter(text='Новый комментарий').exists()
         )
@@ -143,10 +140,10 @@ class PostFormTests(TestCase):
         }
         response = self.authorized_client.post(
             reverse((
-                'posts:add_comment'), kwargs={'post_id': f'{self.post.id}'}),
+                'posts:add_comment'), kwargs={'post_id': self.post.id}),
             data=form_data,
             follow=True
         )
         self.assertRedirects(response, reverse((
-            'posts:post_detail'), kwargs={'post_id': f'{self.post.id}'}))
+            'posts:post_detail'), kwargs={'post_id': self.post.id}))
         self.assertEqual(Comment.objects.count(), comments_count + 1)

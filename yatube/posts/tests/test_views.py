@@ -295,8 +295,10 @@ class FollowViewsTest(TestCase):
 
     def test_unfollow_author(self):
         follow_count = Follow.objects.count()
-        self.authorized_client.get(
-            reverse('posts:profile_follow', args={self.author}))
+        Follow.objects.create(user=self.follower, author=self.author)
+        response = self.authorized_client.get(
+            reverse('posts:follow_index')
+        )
         response = self.authorized_client.get(
             reverse('posts:profile_unfollow', args={self.author}))
         self.assertRedirects(response, reverse(
@@ -304,8 +306,10 @@ class FollowViewsTest(TestCase):
         self.assertEqual(Follow.objects.count(), follow_count)
 
     def test_new_post_follow(self):
-        self.authorized_client.get(
-            reverse('posts:profile_follow', args={self.author}))
+        Follow.objects.create(user=self.follower, author=self.author)
+        response = self.authorized_client.get(
+            reverse('posts:follow_index')
+        )
         response = self.authorized_client.get(
             reverse('posts:follow_index'))
         post_follow = response.context['page_obj'][0]
