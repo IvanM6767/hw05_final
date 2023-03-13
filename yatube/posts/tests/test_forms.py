@@ -79,6 +79,7 @@ class PostFormTests(TestCase):
         self.assertTrue(
             Post.objects.filter(
                 text=form_data['text'],
+                author=self.author,
                 group=form_data['group'],
                 image='posts/small.gif',
             ).exists()
