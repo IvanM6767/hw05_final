@@ -78,13 +78,11 @@ class PostFormTests(TestCase):
         )
         self.assertTrue(
             Post.objects.filter(
-                text='Тестовый пост',
-                group=self.group_1,
-                author=self.author
-            ).exists())
-
-        self.assertEqual(response.context['page_obj'].object_list[0].image,
-                         'posts/small.gif')
+                text=form_data['text'],
+                group=form_data['group'],
+                image='posts/small.gif',
+            ).exists()
+        )
 
     def test_edit_post_form(self):
         """При отправке формы изменяется пост в базе данных.
